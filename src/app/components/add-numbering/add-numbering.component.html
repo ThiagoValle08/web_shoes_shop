@@ -1,0 +1,41 @@
+<div class="contenedor">
+  <div class="card">
+    <div class="card-body">
+      <h3 class="card-title">Agregar Numeración</h3>
+      <div class="my-3">
+        <span><b>Referencia:</b> {{ reference.nombreReferencia }}</span>
+      </div>
+      <div class="row">
+        <div
+          class="col-lg-3 col-md-6 col-sm-12 mb-3"
+          *ngFor="let talla of tallas"
+        >
+          <div class="form-group">
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-error>No se permiten números negativos</mat-error>
+              <mat-label>Talla {{ talla }}</mat-label>
+              <input
+                matInput
+                type="number"
+                placeholder="Cantidad"
+                [(ngModel)]="cantidades[talla]"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end mt-4">
+        <button
+          mat-flat-button
+          color="primary"
+          class="me-3"
+          (click)="guardar()"
+        >
+          Guardar
+        </button>
+        <button mat-flat-button color="warn" mat-dialog-close>Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

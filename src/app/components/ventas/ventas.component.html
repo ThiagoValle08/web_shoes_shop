@@ -1,0 +1,127 @@
+<div class="venta-container">
+  <div class="container">
+    <h4 class="mb-4">Formulario de Venta</h4>
+    <hr />
+    <div class="row mb-4"></div>
+    <form [formGroup]="ventaForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label for="referencia">Referencia</mat-label>
+            <input
+              matInput
+              id="referencia"
+              formControlName="referencia"
+              value="{{ reference.nombreReferencia }}"
+              readonly
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label for="fecha">Fecha</mat-label>
+            <input
+              disabled
+              matInput
+              id="fecha"
+              [value]="fechaHoy | date : 'dd-MM-yyyy'"
+              readonly
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-error>Este campo es obligatorio</mat-error>
+            <mat-label for="nombreCliente">Nombre del Cliente</mat-label>
+            <input
+              matInput
+              id="nombreCliente"
+              formControlName="nombreCliente"
+              placeholder="Ingrese el nombre del cliente"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="tallas-container">
+        <h5 class="">Tallas Vendidas</h5>
+        <div class="row">
+          <div
+            *ngFor="let talla of tallas; let i = index"
+            class="col-lg-2 col-md-3 col-sm-4"
+          >
+            <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Talla {{ talla }}</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="{{ talla }}"
+                placeholder="Ingrese cantidad"
+                min="0"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label for="cantidad">Cantidad</mat-label>
+            <input
+              disabled
+              matInput
+              id="cantidad"
+              [value]="totalCantidad"
+              readonly
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-error>Este campo es obligatorio</mat-error>
+            <mat-label>Precio Total</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="precio"
+              placeholder="Ingrese precio total"
+              min="0"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-error>Este campo es obligatorio</mat-error>
+
+            <mat-label for="formaPago">Forma de Pago</mat-label>
+            <mat-select id="formaPago" formControlName="formaPago">
+              <mat-option value="contado">Contado</mat-option>
+              <mat-option value="crédito">Crédito</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <button
+          mat-raised-button
+          type="submit"
+          color="primary"
+          class="btn btn-primary me-2"
+        >
+          Aceptar
+        </button>
+        <button
+          mat-dialog-close
+          mat-raised-button
+          mat-dialog-close
+          color="warn"
+          class="btn btn-danger"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+.contenedor {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  gap: 40px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background: url("/logos/planet-in-space-side-black-white-desktop-wallpaper (1).webp");
+  background-position: center;
+  background-size: cover;
+}
+
+.button-card {
+  border: 3px double white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  background-color: gray;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  transition: all 0.5s;
+}
+
+.button-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 5px 5px 20px rgb(252, 252, 252);
+
+  transition: all 0.5s;
+}
+
+.button-card i {
+  font-size: 36px;
+  color: #000;
+}
+
+.button-card p {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+button {
+  margin-left: 2rem;
+  width: 130px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 0, 0, 0.593);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  bottom: 10%;
+  font-size: 1em;
+  font-weight: 600;
+  transition: background-color 0.5s;
+}
+button:hover {
+  transition: all 0.5s;
+  background-color: red;
+}
+@media screen and (max-width: 767px) {
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}

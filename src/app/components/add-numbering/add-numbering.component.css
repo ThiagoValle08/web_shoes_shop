@@ -1,0 +1,14 @@
+.card {
+  border-radius: 8px;
+  padding: 20px;
+}
+.btn {
+  width: 100px;
+}
+
+.card-title {
+  font-family: "Afacad Flux", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 500;
+}

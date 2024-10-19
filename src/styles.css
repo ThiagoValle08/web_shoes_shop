@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&display=swap");
+body {
+  margin: 0;
+  width: 100vw;
+  overflow-x: hidden;
+
+  background-image: radial-gradient(#7f7f7f, #ffffff);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(0, 0, 0);
+  border-radius: 10px;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

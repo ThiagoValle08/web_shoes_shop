@@ -1,0 +1,88 @@
+<div class="container mt-4">
+  <div class="backbutton w-100">
+    <h2 class="mb-4">{{ "Bodega" | uppercase }}</h2>
+    <div class="example-button-container">
+      <a mat-flat-button color="primary" routerLink="/adminHome">
+        <mat-icon>arrow_back</mat-icon>
+        Volver
+      </a>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+      <div>
+        <button mat-fab extended color="dark" (click)="openDialog()">
+          <mat-icon>add_box</mat-icon>
+          Ingresar nueva Referencia
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 col-md-6 col-lg-5">
+      <form class="example-form">
+        <mat-form-field class="w-100" appearance="fill">
+          <mat-label>Buscar Referencia</mat-label>
+          <input
+            name="search"
+            color="dark"
+            matInput
+            placeholder="Ingresa Referencia"
+            [(ngModel)]="searchTerm"
+            (input)="filterReferences()"
+          />
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-4 loader_container" *ngIf="showLoader">
+    <div class="row" style="margin-bottom: 2rem">
+      <div class="loader"></div>
+    </div>
+    <div class="row">
+      <span class="text-danger alert alert-danger"
+        >No se encontró la referencia</span
+      >
+    </div>
+  </div>
+  <div class="row">
+    <div class="card-container">
+      <div class="card" *ngFor="let reference of filteredReferences">
+        <h2>{{ reference.nombreReferencia | titlecase }}</h2>
+        <hr />
+        <img
+          *ngIf="reference.imagen"
+          [src]="getImageUrl(reference.imagen)"
+          alt="No se encuentra la imagen"
+          class="reference-image mb-3"
+        />
+
+        <div class="tallas-container">
+          <div class="talla-item" *ngFor="let talla of tallas">
+            <span
+              ><b>Talla {{ talla }} </b>:</span
+            >
+            <span>{{ reference.tallas[talla.toString()] }}</span>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <span><b>Cantidad Total:</b> {{ reference.totalCantidad }}</span>
+        </div>
+        <div class="d-flex w-100 justify-content-center mt-3">
+          <button
+            mat-flat-button
+            color="primary me-2"
+            (click)="addNumbering(reference)"
+          >
+            Agregar
+          </button>
+          <button mat-flat-button color="primary" (click)="venta(reference)">
+            Venta
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

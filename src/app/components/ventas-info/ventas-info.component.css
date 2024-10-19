@@ -1,0 +1,31 @@
+.backbutton {
+  display: flex;
+  justify-content: space-between;
+}
+
+.backbutton button {
+  height: 40px;
+}
+
+h2 {
+  font-family: "Afacad Flux", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 600px;
+}
+
+@media (max-width: 600px) {
+  th,
+  td {
+    padding: 8px 4px;
+  }
+}
