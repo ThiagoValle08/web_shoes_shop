@@ -32,7 +32,6 @@ export class AdminInfoService {
   }
 
   addSale(sale: any) {
-    console.log('servicio', sale);
     this.sales.unshift(sale);
     this.saveSalesToLocalStorage();
   }

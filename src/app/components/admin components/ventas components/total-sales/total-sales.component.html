@@ -1,0 +1,70 @@
+<div class="container mt-5 pb-2">
+  <div class="row" style="margin-top: 20px">
+    <h4 style="color: white">Ver ventas mensuales</h4>
+  </div>
+  <div class="row mt-4">
+    <div class="col-lg-3 col-md-6 col-sm-11">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Seleccionar Año</mat-label>
+        <mat-select
+          [(value)]="selectedYear"
+          (selectionChange)="calculateMonthlySales()"
+        >
+          <mat-option *ngFor="let year of years" [value]="year">
+            {{ year }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-sm-11">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Seleccionar Mes</mat-label>
+        <mat-select
+          [(value)]="selectedMonth"
+          (selectionChange)="calculateMonthlySales()"
+        >
+          <mat-option *ngFor="let month of months" [value]="month.value">
+            {{ month.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-lg-11 totalSales">
+      <span class="alert alert-primary">
+        <b>Total de Ventas de {{ selectedMonthName }} {{ selectedYear }}:</b>
+        {{ totalSales | currency : "COP" : "symbol" : "1.0-0" }}
+      </span>
+    </div>
+  </div>
+
+  <hr style="border-bottom: 5px white double" />
+  <div class="row mt-4">
+    <div class="col-lg-12">
+      <ngx-charts-advanced-pie-chart
+        scheme="air"
+        [results]="chartData"
+        [legend]="true"
+        [doughnut]="true"
+        label="Total ventas del año"
+        [showLabels]="false"
+      ></ngx-charts-advanced-pie-chart>
+    </div>
+  </div>
+  <hr style="border-bottom: 5px white double" />
+  <div class="row mt-5">
+    <div class="col-lg-3 col-sm-11 col-md-6">
+      <button
+        class="w-100"
+        mat-stroked-button
+        color="primary"
+        routerLink="/ventas"
+      >
+        Volver
+      </button>
+    </div>
+  </div>
+</div>

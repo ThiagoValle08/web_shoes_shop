@@ -4,9 +4,25 @@ body {
   width: 100vw;
   overflow-x: hidden;
 
-  background-image: radial-gradient(#7f7f7f, #ffffff);
+  background: url("https://img.freepik.com/foto-gratis/desenfoque-lujo-abstracto-degradado-gris-oscuro-negro-utilizado-como-pared-estudio-fondo-exhibir-sus-productos_1258-63989.jpg?ga=GA1.1.1119362384.1727316598&semt=ais_hybrid");
+  background-size: cover;
+  background-attachment: fixed;
+}
+:root {
+  --first-color: #e3f8ff;
+  --second-color: #dcfafb;
+  --third-color: #ffe8df;
+  --accent-color: #ff5151;
+  --dark-color: #161616;
 }
 
+:root {
+  --body-font: "Open Sans";
+  --h1-font-size: 1.5rem;
+  --h3-font-size: 1rem;
+  --normal-font-size: 0.938rem;
+  --smaller-font-size: 0.75rem;
+}
 ::-webkit-scrollbar {
   width: 10px;
 }

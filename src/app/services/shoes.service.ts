@@ -77,7 +77,7 @@ export class ShoesService {
       case ' HUGO BOSS ':
         this.images = [
           {
-            color: 'COLOR NEGRO',
+            color: 'COLOR NEGRO x BLANCO',
             nombre: 'HUGO BOSS ',
             featuredImage: 'shoesImages/boss/hugo_negro1.webp',
             totalImages: [
@@ -85,6 +85,19 @@ export class ShoesService {
               'shoesImages/boss/hugo_negro2.webp',
               'shoesImages/boss/hugo_negro3.webp',
               'shoesImages/boss/hugo_negro4.webp',
+            ],
+          },
+          {
+            color: 'COLOR NEGRO X NEGRO',
+            nombre: 'HUGO BOSS ',
+            featuredImage: 'shoesImages/boss/bossCapellada1.webp',
+            totalImages: [
+              'shoesImages/boss/bossCapellada1.webp',
+              'shoesImages/boss/bossCapellada2.webp',
+              'shoesImages/boss/bossCapellada3.webp',
+              'shoesImages/boss/bossCapellada4.webp',
+              'shoesImages/boss/bossCapellada5.webp',
+              'shoesImages/boss/bossCapellada6.webp',
             ],
           },
         ];

@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CarouselComponent } from './components/carousel/carousel.component';
-import { LoginComponent } from './components/login/login.component';
-import { AdminHomeComponent } from './components/admin-home/admin-home.component';
-import { BodegaComponent } from './components/bodega/bodega.component';
-import { VentasComponent } from './components/ventas/ventas.component';
-import { ShoesComponent } from './components/shoes/shoes.component';
-import { ProductsComponent } from './components/products/products.component';
-import { VentasInfoComponent } from './components/ventas-info/ventas-info.component';
+import { CarouselComponent } from './components/catalogo components/carousel/carousel.component';
+import { BodegaComponent } from './components/admin components/bodega components/bodega/bodega.component';
 import { authGuard } from './services/auth.guard';
+import { LoginComponent } from './components/catalogo components/login/login.component';
+import { AdminHomeComponent } from './components/admin components/admin-home/admin-home.component';
+import { ShoesComponent } from './components/catalogo components/shoes/shoes.component';
+import { VentasInfoComponent } from './components/admin components/ventas components/ventas-info/ventas-info.component';
+import { ProductsComponent } from './components/catalogo components/products/products.component';
+import { TotalSalesComponent } from './components/admin components/ventas components/total-sales/total-sales.component';
 
 const routes: Routes = [
   { path: 'home', component: CarouselComponent },
@@ -20,7 +20,16 @@ const routes: Routes = [
     component: AdminHomeComponent,
     canActivate: [authGuard],
   },
-  { path: 'ventas', component: VentasInfoComponent, canActivate: [authGuard] },
+  {
+    path: 'ventaxmes',
+    component: TotalSalesComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'ventas',
+    component: VentasInfoComponent,
+    canActivate: [authGuard],
+  },
   { path: 'bodega', component: BodegaComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'home' },
 ];
