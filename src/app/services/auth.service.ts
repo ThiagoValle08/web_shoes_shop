@@ -10,7 +10,6 @@ export class AuthService {
   private loggindata = [
     { user: 'diego', password: '1037601503' },
     { user: 'yenni', password: '1037641514' },
-    { user: '', password: '' },
   ];
 
   constructor(private router: Router) {}

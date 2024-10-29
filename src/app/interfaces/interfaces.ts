@@ -1,9 +1,10 @@
 export interface Referencia {
+  id?: string;
   imagen: File | string | null;
   nombreReferencia: string;
   tallas: Tallas;
   totalCantidad: number;
-  imagenBase64?: string | null; // Nueva propiedad opcional para Base64
+  imagenBase64?: string | null;
 }
 
 export interface Tallas {

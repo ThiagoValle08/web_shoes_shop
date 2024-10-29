@@ -17,6 +17,7 @@ export class BodegaComponent {
   tallas: number[] = [35, 36, 37, 38, 39, 40, 41, 42, 43];
   searchTerm: string = '';
   showLoader: boolean = false;
+  loader: boolean = false;
 
   readonly dialog = inject(MatDialog);
 
@@ -25,9 +26,23 @@ export class BodegaComponent {
     private cdr: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
-    this.references = this.adminInfoService.getReferences();
-    this.filteredReferences = this.references;
+  async ngOnInit() {
+    await this.loadReferences();
+  }
+
+  loadReferences() {
+    this.loader = true;
+    this.adminInfoService
+      .getReferences()
+      .then((references) => {
+        this.references = references;
+        this.filteredReferences = this.references;
+        this.loader = false;
+      })
+      .catch((error) => {
+        console.error('Error al cargar las referencias:', error);
+        this.loader = false;
+      });
   }
 
   filterReferences(): void {
@@ -56,7 +71,7 @@ export class BodegaComponent {
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      this.references = this.adminInfoService.getReferences();
+      // this.references = this.adminInfoService.getReferences();
       this.filteredReferences = this.references;
       this.cdr.detectChanges();
     });

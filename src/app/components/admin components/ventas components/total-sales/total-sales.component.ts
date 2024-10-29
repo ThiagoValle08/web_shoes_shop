@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AdminInfoService } from '../../../../services/admin-info.service';
 
 @Component({
@@ -6,14 +6,13 @@ import { AdminInfoService } from '../../../../services/admin-info.service';
   templateUrl: './total-sales.component.html',
   styleUrls: ['./total-sales.component.css'],
 })
-export class TotalSalesComponent {
+export class TotalSalesComponent implements OnInit {
   selectedYear: number = new Date().getFullYear();
   selectedMonth: number = new Date().getMonth() + 1;
   totalSales: number = 0;
 
-  // Cambia la declaración de view a una tupla
-  monthlySalesData: { name: string; value: number }[] = []; // Datos para el gráfico
-  gradient: boolean = false; // Ajusta si deseas usar gradientes
+  monthlySalesData: { name: string; value: number }[] = [];
+  gradient: boolean = false;
   years: number[] = [];
 
   colorScheme = {
@@ -40,6 +39,9 @@ export class TotalSalesComponent {
 
   constructor(private adminInfoService: AdminInfoService) {
     this.initializeYears();
+  }
+
+  ngOnInit() {
     this.calculateMonthlySales();
   }
 
@@ -57,29 +59,36 @@ export class TotalSalesComponent {
     }
   }
 
-  calculateMonthlySales() {
-    const sales = this.adminInfoService.getSales();
+  async calculateMonthlySales() {
+    try {
+      const sales = await this.adminInfoService.getSales();
 
-    this.monthlySales = Array(12)
-      .fill(0)
-      .map((_, index) => ({
-        month: this.months[index].name,
-        total: 0,
-      }));
+      // Inicializa monthlySales con 0 para cada mes
+      this.monthlySales = Array(12)
+        .fill(0)
+        .map((_, index) => ({
+          month: this.months[index].name,
+          total: 0,
+        }));
 
-    const filteredSales = sales.filter((sale) => {
-      const saleDate = new Date(sale.fecha);
-      return saleDate.getFullYear() === this.selectedYear;
-    });
+      // Filtra las ventas por el año seleccionado
+      const filteredSales = sales.filter((sale) => {
+        const saleDate = this.convertTimestampToDate(sale.fecha);
+        return saleDate.getFullYear() === this.selectedYear;
+      });
 
-    filteredSales.forEach((sale) => {
-      const saleDate = new Date(sale.fecha);
-      const monthIndex = saleDate.getMonth();
-      this.monthlySales[monthIndex].total += sale.precio;
-    });
+      // Suma el total de ventas por mes
+      filteredSales.forEach((sale) => {
+        const saleDate = this.convertTimestampToDate(sale.fecha);
+        const monthIndex = saleDate.getMonth();
+        this.monthlySales[monthIndex].total += sale.precio;
+      });
 
-    this.updateChartData();
-    this.totalSales = this.monthlySales[this.selectedMonth - 1].total;
+      this.updateChartData();
+      this.totalSales = this.monthlySales[this.selectedMonth - 1].total;
+    } catch (error) {
+      console.error('Error al calcular las ventas mensuales:', error);
+    }
   }
 
   updateChartData() {
@@ -89,18 +98,32 @@ export class TotalSalesComponent {
     }));
   }
 
-  updateMonthlySalesData() {
-    const sales = this.adminInfoService.getSales();
-    const monthlySales = Array(12).fill(0); // Inicializa un arreglo para los 12 meses
+  convertTimestampToDate(timestamp: any): Date {
+    if (timestamp && timestamp.toDate) {
+      return timestamp.toDate(); // Convierte el Timestamp de Firebase a Date
+    }
+    return new Date(timestamp); // En caso de que sea otro formato
+  }
 
-    sales.forEach((sale) => {
-      const saleDate = new Date(sale.fecha);
-      monthlySales[saleDate.getMonth()] += sale.precio; // Acumula ventas por mes
-    });
+  async updateMonthlySalesData() {
+    try {
+      const sales = await this.adminInfoService.getSales();
+      const monthlySales = Array(12).fill(0); // Inicializa un arreglo para los 12 meses
 
-    this.monthlySalesData = monthlySales.map((value, index) => ({
-      name: this.months[index].name,
-      value: value,
-    }));
+      sales.forEach((sale) => {
+        const saleDate = this.convertTimestampToDate(sale.fecha);
+        monthlySales[saleDate.getMonth()] += sale.precio; // Acumula ventas por mes
+      });
+
+      this.monthlySalesData = monthlySales.map((value, index) => ({
+        name: this.months[index].name,
+        value: value,
+      }));
+    } catch (error) {
+      console.error(
+        'Error al actualizar los datos de ventas mensuales:',
+        error
+      );
+    }
   }
 }
