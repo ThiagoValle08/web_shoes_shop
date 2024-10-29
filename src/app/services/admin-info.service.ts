@@ -36,13 +36,10 @@ export class AdminInfoService {
   async loadSalesFromFirebase(): Promise<void> {
     try {
       const querySnapshot = await getDocs(collection(db, 'sales'));
-      this.sales = querySnapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          ...data,
-          id: doc.id,
-        };
-      });
+      this.sales = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
     } catch (error) {
       console.error('Error al cargar las ventas desde Firebase:', error);
     }
@@ -67,17 +64,13 @@ export class AdminInfoService {
   async loadReferencesFromFirebase(): Promise<void> {
     try {
       const querySnapshot = await getDocs(collection(db, 'references'));
-      this.allReferences = querySnapshot.docs.map((doc) => {
-        const data = doc.data();
-
-        return {
-          imagen: data['imagen'] ?? '',
-          nombreReferencia: data['nombreReferencia'] ?? '',
-          tallas: data['tallas'] ?? [],
-          totalCantidad: data['totalCantidad'] ?? 0,
-          id: doc.id,
-        } as Referencia;
-      });
+      this.allReferences = querySnapshot.docs.map((doc) => ({
+        imagen: doc.data()['imagen'] ?? '',
+        nombreReferencia: doc.data()['nombreReferencia'] ?? '',
+        tallas: doc.data()['tallas'] ?? [],
+        totalCantidad: doc.data()['totalCantidad'] ?? 0,
+        id: doc.id,
+      }));
     } catch (error) {
       console.error('Error al cargar las referencias desde Firebase:', error);
     }
@@ -91,47 +84,20 @@ export class AdminInfoService {
   }
 
   async setNewReference(reference: Referencia) {
-    if (reference.imagen instanceof File) {
-      reference.imagen = await this.convertFileToBase64(reference.imagen);
-    }
-
     try {
       const docRef = await addDoc(collection(db, 'references'), reference);
-      this.allReferences.push({ ...reference, id: docRef.id }); // Agregar ID de documento
+      this.allReferences.push({ ...reference, id: docRef.id });
     } catch (error) {
       console.error('Error al agregar la referencia a Firebase:', error);
     }
   }
 
   async updateReference(reference: Referencia) {
-    const index = this.allReferences.findIndex(
-      (ref) => ref.nombreReferencia === reference.nombreReferencia
-    );
-
-    if (index !== -1) {
-      this.allReferences[index] = reference;
-    } else {
-      this.allReferences.push(reference);
-    }
-
-    if (reference.imagen instanceof File) {
-      reference.imagen = await this.convertFileToBase64(reference.imagen);
-    }
-
     try {
       const referenceDoc = doc(db, 'references', reference.id);
       await updateDoc(referenceDoc, { ...reference });
     } catch (error) {
       console.error('Error al actualizar la referencia en Firebase:', error);
     }
-  }
-
-  convertFileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
   }
 }

@@ -71,16 +71,61 @@ export class NewReferenceComponent {
     this.referenciaForm.patchValue({ totalCantidad: total });
   }
 
-  onFileSelected(event: any) {
+  async onFileSelected(event: any) {
     const file: File = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-      this.referenciaForm.patchValue({ imagen: file });
-      this.cdr.detectChanges();
+    if (file && file.type.startsWith('image/')) {
+      try {
+        const resizedImage = await this.resizeImage(file, 800, 800); // Ajusta el tamaño máximo según sea necesario
+        this.selectedFile = file;
+        this.referenciaForm.patchValue({ imagen: resizedImage });
+        this.cdr.detectChanges();
+      } catch (error) {
+        console.error('Error al redimensionar la imagen:', error);
+      }
+    } else {
+      alert('Por favor, selecciona una imagen válida');
     }
   }
 
-  onSubmit() {
+  resizeImage(
+    file: File,
+    maxWidth: number,
+    maxHeight: number
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        img.src = reader.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height *= maxWidth / width;
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width *= maxHeight / height;
+              height = maxHeight;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.7)); // Ajusta la calidad si es necesario
+        };
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async onSubmit() {
     this.actualizarTotal();
 
     if (this.referenciaForm.valid) {
@@ -98,14 +143,13 @@ export class NewReferenceComponent {
         tallas: tallas,
       };
 
-      this.adminInfoService.setNewReference(referencia);
+      await this.adminInfoService.setNewReference(referencia);
+      Swal.fire({
+        title: 'Guardado',
+        text: 'Se ha guardado la nueva referencia.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
     }
-
-    Swal.fire({
-      title: 'Guardado',
-      text: 'Se ha guardado la nueva referencia.',
-      icon: 'success',
-      confirmButtonText: 'OK',
-    });
   }
 }
