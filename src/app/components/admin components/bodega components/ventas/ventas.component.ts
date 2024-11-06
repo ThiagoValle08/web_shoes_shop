@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Referencia } from '../../../../interfaces/interfaces';
+import { Referencia, Venta } from '../../../../interfaces/interfaces';
 import { AdminInfoService } from '../../../../services/admin-info.service';
 import Swal from 'sweetalert2';
 
@@ -16,6 +16,7 @@ export class VentasComponent {
   tallas = [35, 36, 37, 38, 39, 40, 41, 42, 43];
   fechaHoy: Date = new Date();
   totalCantidad = 0;
+  ventas: Venta[] = [];
 
   constructor(
     private fb: FormBuilder,

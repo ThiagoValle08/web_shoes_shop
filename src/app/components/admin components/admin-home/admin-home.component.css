@@ -1,78 +1,68 @@
-.contenedor {
-  height: 100vh;
-  overflow: hidden;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
-  gap: 40px;
+.menu-container {
+  max-width: 600px;
+  margin: 0 auto;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  background: url("/logos/planet-in-space-side-black-white-desktop-wallpaper (1).webp");
-  background-position: center;
-  background-size: cover;
+  text-align: center;
 }
 
-.button-card {
-  border: 3px double white;
+.menu-container h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.menu-card .title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.menu-card {
+  border: black 5px double;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 200px;
   height: 200px;
-  background-color: gray;
-  border-radius: 12px;
+  align-items: center;
+  padding: 15px;
+  transition: background-color 0.3s;
   cursor: pointer;
-  transition: transform 0.2s;
-  transition: all 0.5s;
+  overflow: hidden;
 }
 
-.button-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 5px 5px 20px rgb(252, 252, 252);
-
-  transition: all 0.5s;
-}
-
-.button-card i {
-  font-size: 36px;
-  color: #000;
-}
-
-.button-card p {
+.menu-card svg {
+  width: 60%;
+  height: 60%;
   margin-top: 10px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
 }
-button {
-  margin-left: 2rem;
-  width: 130px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(255, 0, 0, 0.593);
-  border: none;
-  outline: none;
-  cursor: pointer;
-  position: relative;
-  bottom: 10%;
-  font-size: 1em;
+
+.menu-card:hover {
+  background-color: #f0f0f0;
+}
+
+mat-icon {
+  color: #0026ff;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1rem;
   font-weight: 600;
-  transition: background-color 0.5s;
 }
-button:hover {
-  transition: all 0.5s;
-  background-color: red;
-}
-@media screen and (max-width: 767px) {
-  .button-container {
-    flex-direction: column;
-    align-items: center;
+
+@media only screen and (max-width: 767px) {
+  .menu-card {
+    width: 150px;
+    height: 150px;
+  }
+
+  .menu-card .title {
+    font-size: 20px;
   }
 }

@@ -8,13 +8,6 @@ body {
   background-size: cover;
   background-attachment: fixed;
 }
-:root {
-  --first-color: #e3f8ff;
-  --second-color: #dcfafb;
-  --third-color: #ffe8df;
-  --accent-color: #ff5151;
-  --dark-color: #161616;
-}
 
 :root {
   --body-font: "Open Sans";

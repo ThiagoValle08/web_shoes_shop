@@ -5,6 +5,9 @@ import {
 } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule } from '@angular/material/sort';
+
 import { AppComponent } from './app.component';
 import { CarouselComponent } from './components/catalogo components/carousel/carousel.component';
 import { RouterModule } from '@angular/router';
@@ -44,6 +47,13 @@ import { LoginComponent } from './components/catalogo components/login/login.com
 import { TotalSalesComponent } from './components/admin components/ventas components/total-sales/total-sales.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ProveedoresComponent } from './components/admin components/proveedores components/proveedores/proveedores.component';
+import { ModalNewProveedorComponent } from './components/admin components/proveedores components/modal-new-proveedor/modal-new-proveedor.component';
+import { ProovedorAccountComponent } from './components/admin components/proveedores components/proovedor-account/proovedor-account.component';
+import { ModalNuevaFacturaComponent } from './components/admin components/proveedores components/modal-nueva-factura/modal-nueva-factura.component';
+import { ModalAddAbonoComponent } from './components/admin components/proveedores components/proovedor-account/modal-add-abono/modal-add-abono.component';
+import { ShowAbonosComponent } from './components/admin components/proveedores components/proovedor-account/show-abonos/show-abonos.component';
+import { ModalCuentasPorPagarComponent } from './components/admin components/proveedores components/proveedores/modal-cuentas-por-pagar/modal-cuentas-por-pagar.component';
 
 @NgModule({
   declarations: [
@@ -60,11 +70,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MoreInfoComponent,
     VentasInfoComponent,
     TotalSalesComponent,
+    ProveedoresComponent,
+    ModalNewProveedorComponent,
+    ProovedorAccountComponent,
+    ModalNuevaFacturaComponent,
+    ModalAddAbonoComponent,
+    ShowAbonosComponent,
+    ModalCuentasPorPagarComponent,
   ],
   imports: [
     BrowserModule,
     MatSnackBarModule,
     ReactiveFormsModule,
+    MatProgressSpinnerModule,
     MatListModule,
     MatStepperModule,
     MatTableModule,
@@ -78,6 +96,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     MatNativeDateModule,
     MatDialogModule,
+    MatSortModule,
     MatButtonToggleModule,
     FormsModule,
     MatIconModule,

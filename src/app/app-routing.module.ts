@@ -9,6 +9,7 @@ import { ShoesComponent } from './components/catalogo components/shoes/shoes.com
 import { VentasInfoComponent } from './components/admin components/ventas components/ventas-info/ventas-info.component';
 import { ProductsComponent } from './components/catalogo components/products/products.component';
 import { TotalSalesComponent } from './components/admin components/ventas components/total-sales/total-sales.component';
+import { ProveedoresComponent } from './components/admin components/proveedores components/proveedores/proveedores.component';
 
 const routes: Routes = [
   { path: 'home', component: CarouselComponent },
@@ -28,6 +29,11 @@ const routes: Routes = [
   {
     path: 'ventas',
     component: VentasInfoComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'proveedores',
+    component: ProveedoresComponent,
     canActivate: [authGuard],
   },
   { path: 'bodega', component: BodegaComponent, canActivate: [authGuard] },

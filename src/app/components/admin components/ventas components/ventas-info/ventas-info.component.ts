@@ -2,11 +2,10 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { formatDate } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { AdminInfoService } from '../../../../services/admin-info.service';
 import { MoreInfoComponent } from '../more-info/more-info.component';
-import { Timestamp } from 'firebase/firestore';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-ventas-info',
@@ -15,6 +14,7 @@ import { Timestamp } from 'firebase/firestore';
 })
 export class VentasInfoComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
+    'id',
     'fecha',
     'cantidad',
     'referencia',
@@ -26,9 +26,11 @@ export class VentasInfoComponent implements OnInit, AfterViewInit {
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
   filterForm: FormGroup;
-  showFilter = false;
+  showFilter: boolean = false;
+  loading: boolean = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private adminInfoService: AdminInfoService,
@@ -36,6 +38,7 @@ export class VentasInfoComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog
   ) {
     this.filterForm = this.fb.group({
+      saleId: [''],
       fecha: [null],
       formaPago: [''],
       cliente: [''],
@@ -48,57 +51,30 @@ export class VentasInfoComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
+    this.loading = true;
     try {
       const sales = await this.adminInfoService.getSales();
-
       this.dataSource = new MatTableDataSource<any>(
         sales.map((sale) => ({
           ...sale,
+          saleId: Number(sale.saleId),
           fecha: this.convertTimestampToDate(sale.fecha),
         }))
       );
       this.dataSource.paginator = this.paginator;
-
-      this.dataSource.filterPredicate = (data: any, filter: string) => {
-        const filtros = JSON.parse(filter);
-
-        const fechaFiltro = filtros.fecha
-          ? formatDate(filtros.fecha, 'yyyy-MM-dd', 'en-US')
-          : null;
-        const fechaData = data.fecha
-          ? formatDate(data.fecha, 'yyyy-MM-dd', 'en-US')
-          : null;
-
-        const fechaMatch =
-          !fechaFiltro || (fechaData && fechaData === fechaFiltro);
-        const formaPagoMatch =
-          !filtros.formaPago ||
-          (data.formaPago &&
-            data.formaPago.toLowerCase() === filtros.formaPago.toLowerCase());
-        const clienteMatch =
-          !filtros.cliente ||
-          (data.nombreCliente &&
-            data.nombreCliente
-              .toLowerCase()
-              .includes(filtros.cliente.toLowerCase()));
-        const referenciaMatch =
-          !filtros.referencia ||
-          (data.referencia &&
-            data.referencia
-              .toLowerCase()
-              .includes(filtros.referencia.toLowerCase()));
-
-        return fechaMatch && formaPagoMatch && clienteMatch && referenciaMatch;
-      };
+      this.dataSource.sort = this.sort;
     } catch (error) {
       console.error('Error al cargar las ventas:', error);
+    } finally {
+      this.loading = false;
     }
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.sort.active = 'saleId';
+    this.sort.direction = 'desc';
+    this.dataSource.sort = this.sort;
   }
-
   toggleFilter() {
     this.showFilter = !this.showFilter;
   }
@@ -118,24 +94,26 @@ export class VentasInfoComponent implements OnInit, AfterViewInit {
 
   clearFilter() {
     this.filterForm.reset();
-    this.dataSource.filter = '';
+    this.applyFilter();
+  }
+
+  totalTallasVendidas(tallasVendidas: any): number {
+    return tallasVendidas.reduce(
+      (total: number, talla: any) => total + talla.cantidad,
+      0
+    );
   }
 
   onViewSale(sale: any) {
     this.dialog.open(MoreInfoComponent, {
-      width: '95vw',
-      height: '90vh',
-      maxWidth: 'none',
       data: sale,
+      width: '80vw',
+      maxHeight: '80vh',
     });
   }
 
-  totalTallasVendidas(tallasVendidas: any[]): number {
-    return tallasVendidas.reduce((acc, t) => acc + t.cantidad, 0);
-  }
-
   convertTimestampToDate(timestamp: any): Date {
-    if (timestamp instanceof Timestamp) {
+    if (timestamp && typeof timestamp.toDate === 'function') {
       return timestamp.toDate();
     }
     return new Date(timestamp);

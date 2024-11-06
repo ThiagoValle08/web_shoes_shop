@@ -1,0 +1,27 @@
+h2 {
+  font-family: "Afacad Flux", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 35px;
+  border-radius: 10px;
+  color: black;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+@media only screen and (max-width: 767px) {
+  .title {
+    flex-direction: column;
+  }
+  .alert span {
+    font-size: 15px;
+  }
+
+  .container {
+    width: 90vw;
+  }
+}
