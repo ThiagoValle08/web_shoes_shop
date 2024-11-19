@@ -1,0 +1,19 @@
+<div class="container p-4">
+  <h4 class="mb-4 mt-2" style="text-align: center">Agregar Nuevo Cliente</h4>
+
+  <form [formGroup]="form">
+    <div class="row mb-2">
+      <mat-form-field class="full-width">
+        <mat-label>Nombre</mat-label>
+        <input matInput required formControlName="nombre" />
+        <mat-error>El campo es obligatorio</mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+  <div mat-dialog-actions align="end">
+    <button class="btn btn-primary" type="submit" (click)="onSave()">
+      Agregar
+    </button>
+    <button class="btn btn-danger ms-3" mat-dialog-close>Cancelar</button>
+  </div>
+</div>

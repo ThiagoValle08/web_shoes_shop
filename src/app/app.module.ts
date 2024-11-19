@@ -9,7 +9,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 
 import { AppComponent } from './app.component';
-import { CarouselComponent } from './components/catalogo components/carousel/carousel.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -41,8 +40,6 @@ import { NewReferenceComponent } from './components/admin components/bodega comp
 import { AdminHomeComponent } from './components/admin components/admin-home/admin-home.component';
 import { AddNumberingComponent } from './components/admin components/bodega components/add-numbering/add-numbering.component';
 import { VentasInfoComponent } from './components/admin components/ventas components/ventas-info/ventas-info.component';
-import { ShoesComponent } from './components/catalogo components/shoes/shoes.component';
-import { ProductsComponent } from './components/catalogo components/products/products.component';
 import { LoginComponent } from './components/catalogo components/login/login.component';
 import { TotalSalesComponent } from './components/admin components/ventas components/total-sales/total-sales.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -54,13 +51,29 @@ import { ModalNuevaFacturaComponent } from './components/admin components/provee
 import { ModalAddAbonoComponent } from './components/admin components/proveedores components/proovedor-account/modal-add-abono/modal-add-abono.component';
 import { ShowAbonosComponent } from './components/admin components/proveedores components/proovedor-account/show-abonos/show-abonos.component';
 import { ModalCuentasPorPagarComponent } from './components/admin components/proveedores components/proveedores/modal-cuentas-por-pagar/modal-cuentas-por-pagar.component';
+import { AppLayoutModule } from './layout/app.layout.module';
+import { WelcomeComponentComponent } from './core/components/pages/welcome-component/welcome-component.component';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { ChartModule } from 'primeng/chart';
+import { CardModule } from 'primeng/card';
+import { MessageModule } from 'primeng/message'; // Para mostrar alertas
+import { AppConfigModule } from './layout/config/config.module';
+import { ClientesComponent } from './components/admin components/clientes components/clientes/clientes.component';
+import { ModalNewClienteComponent } from './components/admin components/clientes components/modales/modal-new-cliente/modal-new-cliente.component';
+import { ClienteAccountComponent } from './components/admin components/clientes components/cliente-account/cliente-account.component';
+import { CuentasPorCobrarComponent } from './components/admin components/clientes components/modales/cuentas-por-cobrar/cuentas-por-cobrar.component';
+import { ModalnuevaFacturaComponent } from './components/admin components/clientes components/modales/modalnueva-factura/modalnueva-factura.component';
+import { ModalAddAbonoClienteComponent } from './components/admin components/clientes components/modales/modal-add-abono-cliente/modal-add-abono-cliente.component';
+import { ModalMostrarAbonosComponent } from './components/admin components/clientes components/modales/modal-mostrar-abonos/modal-mostrar-abonos.component';
+import { SidebarModule } from 'primeng/sidebar';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CarouselComponent,
-    ShoesComponent,
-    ProductsComponent,
     LoginComponent,
     VentasComponent,
     AddNumberingComponent,
@@ -77,27 +90,39 @@ import { ModalCuentasPorPagarComponent } from './components/admin components/pro
     ModalAddAbonoComponent,
     ShowAbonosComponent,
     ModalCuentasPorPagarComponent,
+    WelcomeComponentComponent,
+    ClientesComponent,
+    ModalNewClienteComponent,
+    ClienteAccountComponent,
+    CuentasPorCobrarComponent,
+    ModalnuevaFacturaComponent,
+    ModalAddAbonoClienteComponent,
+    ModalMostrarAbonosComponent,
   ],
   imports: [
     BrowserModule,
     MatSnackBarModule,
+    ProgressSpinnerModule,
+    ChartModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatListModule,
     MatStepperModule,
     MatTableModule,
     MatCardModule,
-    HttpClientModule,
+    MessageModule,
     MatTooltipModule,
     MatCheckboxModule,
     MatGridListModule,
     MatSelectModule,
     MatButtonModule,
+    CardModule,
     AppRoutingModule,
     MatNativeDateModule,
     MatDialogModule,
     MatSortModule,
     MatButtonToggleModule,
+    AppConfigModule,
     FormsModule,
     MatIconModule,
     MatInputModule,
@@ -106,6 +131,14 @@ import { ModalCuentasPorPagarComponent } from './components/admin components/pro
     MatDatepickerModule,
     NgxChartsModule,
     BrowserAnimationsModule,
+    AppLayoutModule,
+    ButtonModule,
+    FormsModule,
+    SidebarModule,
+    RadioButtonModule,
+    ButtonModule,
+    InputSwitchModule,
+    InputTextModule,
   ],
   exports: [RouterModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

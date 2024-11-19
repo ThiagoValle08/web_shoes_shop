@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Referencia, Venta } from '../../../../interfaces/interfaces';
 import { AdminInfoService } from '../../../../services/admin-info.service';
@@ -31,6 +31,7 @@ export class VentasComponent {
     this.ventaForm = this.fb.group({
       nombreCliente: ['', Validators.required],
       formaPago: ['', Validators.required],
+      valorPorPar: ['', Validators.required],
       precio: ['', [Validators.required, Validators.min(0)]],
       fecha: [{ value: this.fechaHoy, disabled: true }],
       referencia: [{ value: this.reference.nombreReferencia, disabled: true }],
@@ -44,6 +45,13 @@ export class VentasComponent {
     this.ventaForm.valueChanges.subscribe((formValue) => {
       this.calcularCantidadTotal(formValue);
     });
+  }
+
+  calcularPrecioTotal() {
+    const cantidad = this.ventaForm.get('totalCantidad')?.value || 0;
+    const valorPorPar = this.ventaForm.get('valorPorPar')?.value || 0;
+    const precioTotal = cantidad * valorPorPar;
+    this.ventaForm.get('precio')?.setValue(precioTotal);
   }
 
   calcularCantidadTotal(formValue: any): void {

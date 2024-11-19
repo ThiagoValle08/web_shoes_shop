@@ -1,12 +1,11 @@
-.venta-container {
-  padding: 16px;
-  border: 1px solid #060505;
-  border-radius: 8px;
-  background: #fff;
-}
-
 .tallas-container {
   margin: 16px 0;
+}
+.contenedor {
+  padding: 1rem;
+}
+.text-center {
+  text-align: center;
 }
 
 .button-container {

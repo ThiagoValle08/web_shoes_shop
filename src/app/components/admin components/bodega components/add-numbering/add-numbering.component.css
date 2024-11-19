@@ -5,7 +5,13 @@
 .btn {
   width: 100px;
 }
-
+.text-center {
+  display: flex;
+  gap: 20px;
+}
+.text-center .btns {
+  border-radius: 10px !important;
+}
 .card-title {
   font-family: "Afacad Flux", sans-serif;
   font-optical-sizing: auto;

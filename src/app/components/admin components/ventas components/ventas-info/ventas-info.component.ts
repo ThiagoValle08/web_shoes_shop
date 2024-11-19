@@ -30,8 +30,7 @@ export class VentasInfoComponent implements OnInit, AfterViewInit {
   loading: boolean = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   constructor(
     private adminInfoService: AdminInfoService,
     private fb: FormBuilder,
@@ -63,6 +62,23 @@ export class VentasInfoComponent implements OnInit, AfterViewInit {
       );
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+
+      // Sobrescribir el filtro personalizado
+      this.dataSource.filterPredicate = (data, filter) => {
+        const filterValues = JSON.parse(filter);
+        return (
+          (!filterValues.fecha ||
+            data.fecha.toLocaleDateString().includes(filterValues.fecha)) &&
+          (!filterValues.formaPago ||
+            data.formaPago
+              .toLowerCase()
+              .includes(filterValues.formaPago.toLowerCase())) &&
+          (!filterValues.cliente ||
+            data.nombreCliente.toLowerCase().includes(filterValues.cliente)) &&
+          (!filterValues.referencia ||
+            data.referencia.toLowerCase().includes(filterValues.referencia))
+        );
+      };
     } catch (error) {
       console.error('Error al cargar las ventas:', error);
     } finally {
@@ -71,9 +87,11 @@ export class VentasInfoComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.sort.active = 'saleId';
-    this.sort.direction = 'desc';
-    this.dataSource.sort = this.sort;
+    if (this.sort) {
+      this.sort.active = 'saleId';
+      this.sort.direction = 'desc';
+      this.dataSource.sort = this.sort;
+    }
   }
   toggleFilter() {
     this.showFilter = !this.showFilter;
@@ -82,7 +100,9 @@ export class VentasInfoComponent implements OnInit, AfterViewInit {
   applyFilter() {
     if (this.dataSource) {
       const filterValues = {
-        fecha: this.filterForm.get('fecha')?.value || '',
+        fecha: this.filterForm.get('fecha')?.value
+          ? new Date(this.filterForm.get('fecha')?.value).toLocaleDateString()
+          : '',
         formaPago: this.filterForm.get('formaPago')?.value || '',
         cliente: this.filterForm.get('cliente')?.value?.toLowerCase() || '',
         referencia:

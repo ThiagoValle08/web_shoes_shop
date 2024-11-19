@@ -1,0 +1,56 @@
+<div class="container">
+  <h2 mat-dialog-title style="text-align: center">Agregar Nueva Factura</h2>
+  <div mat-dialog-content>
+    <form [formGroup]="facturaForm">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-11">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Fecha</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="fecha" />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="facturaForm.get('fecha')?.hasError('required')">
+              La fecha es obligatoria
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-11">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Número de Factura</mat-label>
+            <input matInput type="text" formControlName="numero" />
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-11">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Referencia</mat-label>
+            <input matInput type="text" formControlName="referencia" required />
+            <mat-error
+              *ngIf="facturaForm.get('referencia')?.hasError('required')"
+            >
+              La referencia es obligatoria
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-11">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Valor</mat-label>
+            <input matInput type="number" formControlName="valor" required />
+            <mat-error *ngIf="facturaForm.get('valor')?.hasError('required')">
+              El valor es obligatorio
+            </mat-error>
+            <mat-error *ngIf="facturaForm.get('valor')?.hasError('min')">
+              El valor debe ser mayor a 0
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-flat-button (click)="onSubmit()">Aceptar</button>
+    <button mat-flat-button color="warn" (click)="onCancel()">Cancelar</button>
+  </div>
+</div>

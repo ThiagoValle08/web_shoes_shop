@@ -65,13 +65,13 @@ export class BodegaComponent {
 
   openDialog() {
     const dialogRef = this.dialog.open(NewReferenceComponent, {
-      width: '95vw',
-      height: '90vh',
-      maxWidth: 'none',
+      width: '90vw',
+      minWidth: '70vw',
+      height: '70vh',
+      maxHeight: '70vh',
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      // this.references = this.adminInfoService.getReferences();
       this.filteredReferences = this.references;
       this.cdr.detectChanges();
     });
@@ -79,18 +79,19 @@ export class BodegaComponent {
 
   addNumbering(reference: any) {
     const dialogRef = this.dialog.open(AddNumberingComponent, {
-      width: '95vw',
-      height: '90vh',
-      maxWidth: 'none',
+      width: '90vw',
+      height: '70vh',
+      maxHeight: '70vh',
+      maxWidth: '90vw',
       data: { reference: reference },
     });
   }
 
   venta(reference: any) {
     const dialogRef = this.dialog.open(VentasComponent, {
-      width: '95vw',
-      height: '90vh',
-      maxWidth: 'none',
+      width: '90vw',
+      height: '70vh',
+      maxHeight: '70vh',
       data: { reference: reference },
     });
   }

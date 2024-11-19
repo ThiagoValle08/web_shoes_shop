@@ -1,5 +1,4 @@
 .container {
-  color: white;
 }
 .advanced-pie-legend
   .legend-items-container
@@ -11,6 +10,51 @@
   margin-left: 11px;
 }
 
+/* Asegura que el contenedor del gráfico sea responsivo */
+.chart-container {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  /* Ajusta el tamaño del gráfico en pantallas pequeñas */
+  .chart-container p-chart {
+    width: 100% !important;
+    height: 300px !important; /* Ajuste de altura para pantallas pequeñas */
+  }
+}
+
+@media (min-width: 769px) {
+  /* Ajuste de tamaño para pantallas más grandes */
+  .chart-container p-chart {
+    width: 100% !important;
+    height: 400px !important; /* Ajuste de altura para pantallas más grandes */
+  }
+}
+/* total-sales.component.css */
+.small-chart {
+  max-width: 600px; /* Establecer un máximo de ancho */
+  height: 300px; /* Establecer una altura */
+  margin: 0 auto; /* Centrar el gráfico */
+}
+
+@media (max-width: 768px) {
+  .small-chart {
+    max-width: 100%; /* Permitir que ocupe todo el ancho en pantallas más pequeñas */
+    height: 250px; /* Reducir la altura en pantallas más pequeñas */
+  }
+}
+
+h2 {
+  font-family: "Afacad Flux", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 500;
+  margin: 0 auto !important;
+  text-align: center;
+}
 ::ng-deep
   .advanced-pie-legend
   .legend-items-container

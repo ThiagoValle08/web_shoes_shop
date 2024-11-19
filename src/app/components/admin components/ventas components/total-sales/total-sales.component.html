@@ -1,7 +1,8 @@
-<div class="container mt-5 pb-2">
+<div class="container mt-5 p-5">
   <div class="row" style="margin-top: 20px">
-    <h4 style="color: white">Ver ventas mensuales</h4>
+    <h2 style="margin: 0 auto">Ventas Totales</h2>
   </div>
+
   <div class="row mt-4">
     <div class="col-lg-3 col-md-6 col-sm-11">
       <mat-form-field appearance="fill" class="w-100">
@@ -32,39 +33,53 @@
     </div>
   </div>
 
-  <div class="row mt-4">
-    <div class="col-lg-11 totalSales">
-      <span class="alert alert-primary">
-        <b>Total de Ventas de {{ selectedMonthName }} {{ selectedYear }}:</b>
-        {{ totalSales | currency : "COP" : "symbol" : "1.0-0" }}
-      </span>
+  <p-card class="mt-4">
+    <ng-template pTemplate="header">
+      <div class="d-flex justify-content-between align-items-center">
+        <span
+          ><b
+            >Total de Ventas de {{ selectedMonthName }} {{ selectedYear }}:</b
+          ></span
+        >
+      </div>
+    </ng-template>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="col-12 col-md-6">
+        <p-message
+          severity="info"
+          text="{{ totalSales | currency : 'COP' : 'symbol' : '1.0-0' }}"
+        ></p-message>
+      </div>
     </div>
-  </div>
+  </p-card>
 
-  <hr style="border-bottom: 5px white double" />
-  <div class="row mt-4">
-    <div class="col-lg-12">
-      <ngx-charts-advanced-pie-chart
-        scheme="air"
-        [results]="chartData"
-        [legend]="true"
-        [doughnut]="true"
-        label="Total ventas del año"
-        [showLabels]="false"
-      ></ngx-charts-advanced-pie-chart>
+  <hr style="border-bottom: 5px black double" />
+
+  <!-- Gráficas -->
+  <div class="container mt-5 mb-5">
+    <h2>Ventas Totales por Mes</h2>
+
+    <div *ngIf="isLargeScreen" class="chart-container">
+      <p-chart
+        type="bar"
+        [data]="chartData"
+        [options]="chartOptions"
+        styleClass="w-100"
+      ></p-chart>
+    </div>
+
+    <div *ngIf="!isLargeScreen" class="chart-container">
+      <p-chart
+        type="doughnut"
+        [data]="chartData"
+        [options]="chartOptions"
+        styleClass="w-100"
+      ></p-chart>
     </div>
   </div>
-  <hr style="border-bottom: 5px white double" />
-  <div class="row mt-5">
-    <div class="col-lg-3 col-sm-11 col-md-6">
-      <button
-        class="w-100"
-        mat-stroked-button
-        color="primary"
-        routerLink="/ventas"
-      >
-        Volver
-      </button>
-    </div>
-  </div>
+  <p-card class="mt-5" header="Ventas del año">
+    <p class="m-0">
+      <b>{{ annualSales | currency : "COP " : "symbol" : "1.0-0" }}</b>
+    </p>
+  </p-card>
 </div>

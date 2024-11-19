@@ -1,0 +1,30 @@
+.container h2 {
+  font-family: "Afacad Flux", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 35px;
+}
+
+.estado-verde {
+  color: rgb(92, 177, 40);
+}
+
+.estado-rojo {
+  color: red;
+}
+
+.btn_contenedor {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+@media only screen and (max-width: 767px) {
+  .btn_contenedor {
+    flex-direction: column;
+  }
+}
+.demo-table {
+  width: 100%;
+}

@@ -8,6 +8,8 @@ import { ModalAddAbonoComponent } from './modal-add-abono/modal-add-abono.compon
 import { ShowAbonosComponent } from './show-abonos/show-abonos.component';
 import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+
 
 @Component({
   selector: 'app-proovedor-account',
@@ -31,6 +33,7 @@ export class ProovedorAccountComponent implements AfterViewInit {
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private adminInfoService: AdminInfoService,
@@ -43,6 +46,7 @@ export class ProovedorAccountComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
 
@@ -50,16 +54,19 @@ export class ProovedorAccountComponent implements AfterViewInit {
     this.proveedor = this.adminInfoService.getProveedorByName(this.data.nombre);
 
     if (this.proveedor && this.proveedor.facturas) {
-      this.dataSource.data = this.proveedor.facturas.map((factura) => {
+      const facturas = this.proveedor.facturas.map((factura) => {
         factura.estado = factura.deuda <= 0;
         return factura;
       });
+
+      this.dataSource.data = facturas.reverse();
     } else {
       this.dataSource.data = [];
     }
 
     this.calcularTotalDeuda();
   }
+
 
   calcularTotalDeuda(): void {
     this.totalDeuda = this.dataSource.data.reduce(

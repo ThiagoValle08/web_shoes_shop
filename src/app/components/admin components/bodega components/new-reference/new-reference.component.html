@@ -1,6 +1,6 @@
 <mat-card class="contenedor">
   <form [formGroup]="referenciaForm" (ngSubmit)="onSubmit()">
-    <h4>Agregar Referencia</h4>
+    <h4 style="text-align: center">Agregar Referencia</h4>
 
     <div class="custom-file-upload mb-4">
       <button
@@ -85,7 +85,7 @@
     <div class="total-container mb-4 text-right">
       <span>Total Cantidad: {{ calcularTotal() }}</span>
     </div>
-    <mat-dialog-actions align="end" class="buttons_actions">
+    <mat-dialog-actions align="end" class="buttons_action me-4">
       <button
         mat-dialog-close
         class="btn btn-primary"

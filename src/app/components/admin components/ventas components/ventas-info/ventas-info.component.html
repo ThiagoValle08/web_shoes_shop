@@ -3,25 +3,25 @@
     <div class="container mt-4 mb-5">
       <div class="row">
         <div class="backbutton w-100">
-          <h2 class="mb-4">{{ "Ventas" | uppercase }}</h2>
-          <div class="example-button-container">
-            <a mat-flat-button color="primary" routerLink="/adminHome">
-              <mat-icon>arrow_back</mat-icon>
-              Volver
-            </a>
-          </div>
+          <h2 class="mb-4" style="margin: 0 auto">
+            {{ "Ventas" | titlecase }}
+          </h2>
         </div>
-
         <div style="margin-bottom: 16px">
-          <button mat-raised-button color="primary" (click)="toggleFilter()">
-            Filtrar
-          </button>
+          <button
+            style="border-radius: 10px"
+            pButton
+            pButtonType="raised"
+            label="Filtrar"
+            (click)="toggleFilter()"
+            class="p-button-primary"
+          ></button>
         </div>
 
         <div *ngIf="showFilter" style="margin-bottom: 16px; width: 90vw">
           <form [formGroup]="filterForm">
             <div class="row" style="width: 100vw">
-              <div class="col-lg-3 col-md-6 col-sm-11">
+              <div class="col-lg-2 col-md-6 col-sm-11">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Fecha</mat-label>
                   <input
@@ -36,16 +36,18 @@
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
               </div>
-              <div class="col-lg-3 col-md-6 col-sm-11">
+              <div class="col-lg-2 col-md-6 col-sm-11">
                 <mat-form-field appearance="fill" class="w-100">
-                  <mat-label>Forma de Pago</mat-label>
-                  <mat-select formControlName="formaPago">
-                    <mat-option value="crédito">Crédito</mat-option>
-                    <mat-option value="contado">Contado</mat-option>
-                  </mat-select>
+                  <mat-label>Referencia</mat-label>
+                  <input
+                    matInput
+                    formControlName="referencia"
+                    placeholder="Referencia"
+                  />
                 </mat-form-field>
               </div>
-              <div class="col-lg-3 col-md-6 col-sm-11">
+
+              <div class="col-lg-2 col-md-6 col-sm-11">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Cliente</mat-label>
                   <input
@@ -56,35 +58,40 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row" style="width: 100vw">
+            <div class="row">
               <div class="col-lg-3 col-md-6 col-sm-11">
                 <mat-form-field appearance="fill" class="w-100">
-                  <mat-label>Referencia</mat-label>
-                  <input
-                    matInput
-                    formControlName="referencia"
-                    placeholder="Referencia"
-                  />
+                  <mat-label>Forma de Pago</mat-label>
+                  <mat-select formControlName="formaPago">
+                    <mat-option value="crédito">Crédito</mat-option>
+                    <mat-option value="contado">Contado</mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
             </div>
-            <button mat-button (click)="clearFilter()">Limpiar Filtros</button>
+            <button
+              pButton
+              pButtonType="text"
+              label="Limpiar Filtros"
+              (click)="clearFilter()"
+              class="p-button-text"
+            ></button>
           </form>
         </div>
 
+        <div *ngIf="loading" class="text-center mt-2 mb-4">
+          <p-progressSpinner styleClass="center"></p-progressSpinner>
+          <p class="text-dark mt-3">Cargando ventas...</p>
+        </div>
         <div class="table-responsive" style="width: 100%">
-          <div *ngIf="loading" class="text-center mt-5">
-            <mat-spinner style="margin: 0 auto"></mat-spinner>
-            <p class="text-light mt-3">Cargando ventas...</p>
-          </div>
           <table
             mat-table
             matSort
             [dataSource]="dataSource"
-            class="mat-elevation-z8 table"
+            class="mat-elevation-z8 table mt-2"
           >
             <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
               <td mat-cell *matCellDef="let sale">{{ sale.saleId }}</td>
             </ng-container>
 
@@ -139,14 +146,6 @@
         >
         </mat-paginator>
       </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-lg-3 col-md-6 col-sm-11">
-      <button mat-stroked-button class="w-100" routerLink="/ventaxmes">
-        Ver Ventas por mes
-      </button>
     </div>
   </div>
 </div>

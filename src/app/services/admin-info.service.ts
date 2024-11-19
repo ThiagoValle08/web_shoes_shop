@@ -7,7 +7,7 @@ import {
   doc,
   Timestamp,
 } from 'firebase/firestore';
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApp, FirebaseApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { factura, Venta } from '../interfaces/interfaces';
 import { abono, proveedor, Referencia } from '../interfaces/interfaces';
@@ -22,7 +22,23 @@ const firebaseConfig = {
   measurementId: 'G-F6NHL2XCLZ',
 };
 
-initializeApp(firebaseConfig);
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyCX2-xvRa10EEkUOt7G3pHb76AAWNmnaxA',
+//   authDomain: 'developmentenvironment-d6d05.firebaseapp.com',
+//   projectId: 'developmentenvironment-d6d05',
+//   storageBucket: 'developmentenvironment-d6d05.firebasestorage.app',
+//   messagingSenderId: '384228566350',
+//   appId: '1:384228566350:web:9a72980915a4d043ccaa1f',
+//   measurementId: 'G-PJMD28TRF2',
+// };
+
+let app: FirebaseApp;
+try {
+  app = getApp();
+} catch (error) {
+  app = initializeApp(firebaseConfig);
+}
+
 const db = getFirestore();
 
 @Injectable({
@@ -33,9 +49,40 @@ export class AdminInfoService {
   allReferences: Referencia[] = [];
   sales: Venta[] = [];
   allProveedores: proveedor[] = [];
+  allClientes: proveedor[] = [];
 
   constructor() {
     this.loadProveedoresFromFirebase();
+    this.loadClientesFromFirebase();
+  }
+
+  async loadClientesFromFirebase(): Promise<void> {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'clientes'));
+      this.allClientes = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+
+        const facturas = (data['facturas'] || []).map((factura: any) => ({
+          ...factura,
+          abono: factura.abono
+            ? factura.abono.map((ab: any) => ({
+                ...ab,
+                fecha:
+                  ab.fecha instanceof Timestamp ? ab.fecha.toDate() : ab.fecha,
+              }))
+            : [],
+        }));
+
+        return {
+          nombre: data['nombre'] || '',
+          tipo: data['tipo'] || '',
+          facturas: facturas || null,
+          id: doc.id,
+        } as proveedor;
+      });
+    } catch (error) {
+      console.error('Error al cargar los clientes desde Firebase:', error);
+    }
   }
 
   async loadProveedoresFromFirebase(): Promise<void> {
@@ -86,25 +133,51 @@ export class AdminInfoService {
     }
   }
 
+  async addNewCliente(newCliente: proveedor): Promise<void> {
+    try {
+      const docRef = await addDoc(collection(db, 'clientes'), newCliente);
+      this.allClientes.unshift({ ...newCliente, id: docRef.id });
+    } catch (error) {
+      console.error('Error al agregar el cliente a Firebase:', error);
+    }
+  }
+
   async getProveedores(): Promise<proveedor[]> {
     const querySnapshot = await getDocs(collection(db, 'proveedores'));
     const proveedoresList: proveedor[] = [];
     querySnapshot.forEach((doc) => {
-      const data = doc.data() as proveedor; // Asegúrate de que esto se ajuste a tu estructura
-      proveedoresList.push({ ...data, id: doc.id }); // Incluye el id
+      const data = doc.data() as proveedor;
+      proveedoresList.push({ ...data, id: doc.id });
     });
     return proveedoresList;
   }
 
+  async getClientes(): Promise<proveedor[]> {
+    const querySnapshot = await getDocs(collection(db, 'clientes'));
+    const clientesList: proveedor[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data() as proveedor;
+      clientesList.push({ ...data, id: doc.id });
+    });
+    return clientesList;
+  }
+
   getProveedorByName(nombre: string): proveedor | undefined {
     return this.allProveedores.find((p) => p.nombre === nombre);
+  }
+  getClienteByName(nombre: string): proveedor | undefined {
+    return this.allClientes.find((p) => p.nombre === nombre);
   }
 
   getNextFacturaId(nombreProveedor: string): number {
     const proveedor = this.allProveedores.find(
       (p) => p.nombre === nombreProveedor
     );
-    return proveedor && proveedor.facturas ? proveedor.facturas.length + 1 : 1; // Asegúrate de que esto esté correcto
+    return proveedor && proveedor.facturas ? proveedor.facturas.length + 1 : 1;
+  }
+  getNextFacturaClienteId(nombreCliente: string): number {
+    const cliente = this.allClientes.find((p) => p.nombre === nombreCliente);
+    return cliente && cliente.facturas ? cliente.facturas.length + 1 : 1;
   }
 
   async agregarFacturaAProveedor(
@@ -117,12 +190,11 @@ export class AdminInfoService {
 
     if (!proveedor) {
       console.error('Proveedor no encontrado:', nombreProveedor);
-      return; // Salir si no se encuentra el proveedor
+      return;
     }
 
     nuevaFactura.numeroId = this.getNextFacturaId(nombreProveedor);
 
-    // Asegúrate de que proveedor.facturas esté inicializado
     proveedor.facturas = proveedor.facturas
       ? [...proveedor.facturas, nuevaFactura]
       : [nuevaFactura];
@@ -132,6 +204,47 @@ export class AdminInfoService {
       await updateDoc(proveedorDoc, { facturas: proveedor.facturas });
     } catch (error) {
       console.error('Error al actualizar el proveedor en Firebase:', error);
+    }
+  }
+
+  async agregarFacturaACliente(
+    nombreCliente: string,
+    nuevaFactura: factura
+  ): Promise<void> {
+    const cliente = this.allClientes.find(
+      (p) => p.nombre.toLocaleLowerCase() === nombreCliente.toLowerCase()
+    );
+    if (!cliente) {
+      console.error('Cliente no encontrado:', nombreCliente);
+      return;
+    }
+
+    nuevaFactura.numeroId = this.getNextFacturaClienteId(nombreCliente);
+    nuevaFactura.estado = nuevaFactura.estado || true;
+    nuevaFactura.fecha = nuevaFactura.fecha || new Date().toISOString();
+    nuevaFactura.numero = nuevaFactura.numero || '0';
+    nuevaFactura.referencia = nuevaFactura.referencia || '';
+    nuevaFactura.valor = nuevaFactura.valor || 0;
+    nuevaFactura.deuda = nuevaFactura.deuda || nuevaFactura.valor;
+    nuevaFactura.abono = nuevaFactura.abono || [];
+
+    if (
+      nuevaFactura.numeroId &&
+      nuevaFactura.fecha &&
+      nuevaFactura.valor !== undefined
+    ) {
+      cliente.facturas = cliente.facturas
+        ? [...cliente.facturas, nuevaFactura]
+        : [nuevaFactura];
+
+      try {
+        const clienteDoc = doc(db, 'clientes', cliente.id);
+        await updateDoc(clienteDoc, { facturas: cliente.facturas });
+      } catch (error) {
+        console.error('Error al actualizar el cliente en Firebase:', error);
+      }
+    } else {
+      console.error('Factura con datos incompletos, no se puede actualizar.');
     }
   }
 
@@ -148,21 +261,43 @@ export class AdminInfoService {
     const factura = proveedor.facturas?.find((f) => f.numeroId === numeroId);
     if (!factura) return;
 
-    // Agregar el nuevo abono
     factura.abono = factura.abono
       ? [...factura.abono, nuevoAbono]
       : [nuevoAbono];
 
-    // Actualizar la deuda restando el monto del nuevo abono
     factura.deuda -= nuevoAbono.cantidad;
 
-    // Asegurarse de que la deuda no sea negativa
     if (factura.deuda < 0) factura.deuda = 0;
 
-    // Actualizar el proveedor en Firebase
     try {
       const proveedorDoc = doc(db, 'proveedores', proveedor.id);
       await updateDoc(proveedorDoc, { facturas: proveedor.facturas });
+    } catch (error) {
+      console.error('Error al actualizar el proveedor en Firebase:', error);
+    }
+  }
+  async agregarAbonoClienteFactura(
+    nombreCliente: string,
+    numeroId: number,
+    nuevoAbono: abono
+  ): Promise<void> {
+    const cliente = this.allClientes.find((p) => p.nombre === nombreCliente);
+    if (!cliente) return;
+
+    const factura = cliente.facturas?.find((f) => f.numeroId === numeroId);
+    if (!factura) return;
+
+    factura.abono = factura.abono
+      ? [...factura.abono, nuevoAbono]
+      : [nuevoAbono];
+
+    factura.deuda -= nuevoAbono.cantidad;
+
+    if (factura.deuda < 0) factura.deuda = 0;
+
+    try {
+      const proveedorDoc = doc(db, 'clientes', cliente.id);
+      await updateDoc(proveedorDoc, { facturas: cliente.facturas });
     } catch (error) {
       console.error('Error al actualizar el proveedor en Firebase:', error);
     }
@@ -174,7 +309,7 @@ export class AdminInfoService {
       this.sales = querySnapshot.docs.map((doc) => {
         const data = doc.data();
         return {
-          saleId: data['saleId'], // Tomando el saleId directamente del campo
+          saleId: data['saleId'],
           fecha:
             data['fecha'] instanceof Timestamp
               ? data['fecha'].toDate()
@@ -194,22 +329,63 @@ export class AdminInfoService {
     }
   }
 
-  async addSale(sale: any): Promise<void> {
+  async addSale(sale: Venta): Promise<void> {
     try {
       await this.loadSalesFromFirebase();
 
+      if (sale.formaPago === 'crédito') {
+        let cliente = this.getClienteByName(sale.nombreCliente.toLowerCase());
+
+        if (!cliente) {
+          const clientesSnapshot = await getDocs(collection(db, 'clientes'));
+          const clientes = clientesSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          })) as proveedor[];
+
+          cliente = clientes.find(c =>
+            c.nombre.toLowerCase() === sale.nombreCliente.toLowerCase()
+          );
+
+          if (!cliente) {
+            cliente = {
+              nombre: sale.nombreCliente,
+              facturas: [],
+            } as proveedor;
+
+            await this.addNewCliente(cliente);
+          }
+        }
+
+        const nuevaFactura: factura = {
+          numeroId: this.getNextFacturaClienteId(cliente.nombre), // Usar el cliente encontrado o creado
+          estado: false,
+          fecha: sale.fecha.toString(),
+          numero: sale.saleId,
+          referencia: sale.referencia,
+          valor: sale.precio,
+          deuda: sale.precio,
+          abono: [],
+        };
+
+        await this.agregarFacturaACliente(cliente.nombre, nuevaFactura);
+      }
+
+      // Obtener el siguiente saleId
       const mayorSaleId = this.sales.reduce((max, current) => {
         return Math.max(max, Number(current.saleId));
       }, 0);
 
       sale.saleId = (mayorSaleId + 1).toString();
 
+      // Agregar la venta a Firebase
       const docRef = await addDoc(collection(db, 'sales'), sale);
       this.sales.unshift({ ...sale, id: docRef.id });
     } catch (error) {
       console.error('Error al agregar la venta a Firebase:', error);
     }
   }
+
 
   async getSales(): Promise<any[]> {
     if (this.sales.length === 0) {

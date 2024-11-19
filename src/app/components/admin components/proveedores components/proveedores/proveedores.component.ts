@@ -15,8 +15,7 @@ export class ProveedoresComponent implements OnInit {
   proveedores: proveedor[] = [];
   filteredProveedores: proveedor[] = [];
   searchTerm: string = '';
-  loading: boolean = true; // Variable para controlar el estado del loader
-
+  loading: boolean = true;
   constructor(
     public dialog: MatDialog,
     private adminInfoService: AdminInfoService
@@ -27,10 +26,10 @@ export class ProveedoresComponent implements OnInit {
   }
 
   async loadProveedores(): Promise<void> {
-    this.loading = true; // Iniciar el loader
-    this.proveedores = await this.adminInfoService.getProveedores(); // Obtener proveedores
-    this.filteredProveedores = this.proveedores; // Asignar a filteredProveedores
-    this.loading = false; // Detener el loader
+    this.loading = true;
+    this.proveedores = await this.adminInfoService.getProveedores();
+    this.filteredProveedores = this.proveedores;
+    this.loading = false;
   }
 
   openModal(): void {
@@ -39,7 +38,7 @@ export class ProveedoresComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
         await this.adminInfoService.addNewProveedor(result);
-        await this.loadProveedores(); // Volver a cargar proveedores
+        await this.loadProveedores();
         this.filterProveedores();
       }
     });

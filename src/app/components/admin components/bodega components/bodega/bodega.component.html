@@ -1,32 +1,27 @@
-<div class="container mt-4">
+<div class="container ps-3">
   <div class="backbutton w-100">
-    <h2 class="mb-4">{{ "Bodega" | uppercase }}</h2>
-    <div class="example-button-container">
-      <a mat-flat-button color="primary" routerLink="/adminHome">
-        <mat-icon>arrow_back</mat-icon>
-        Volver
-      </a>
-    </div>
+    <h2 style="margin: 0 auto">{{ "Bodega" | titlecase }}</h2>
   </div>
   <br />
-  <div class="row">
+  <div class="actions">
     <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
       <div>
-        <button mat-fab extended color="dark" (click)="openDialog()">
-          <mat-icon>add_box</mat-icon>
-          Ingresar nueva Referencia
+        <button
+          class="p-button"
+          (click)="openDialog()"
+          style="border-radius: 10px"
+        >
+          <i class="pi pi-plus-circle p-button-icon-left"></i>
+          <span class="p-button-label">Ingresar nueva Referencia</span>
         </button>
       </div>
     </div>
-  </div>
-  <div class="row">
     <div class="col-sm-6 col-md-6 col-lg-5">
       <form class="example-form">
         <mat-form-field class="w-100" appearance="fill">
           <mat-label>Buscar Referencia</mat-label>
           <input
             name="search"
-            color="dark"
             matInput
             placeholder="Ingresa Referencia"
             [(ngModel)]="searchTerm"
@@ -36,63 +31,87 @@
       </form>
     </div>
   </div>
-  <div class="row mt-4 loader_container" *ngIf="showLoader">
-    <div class="row" style="margin-bottom: 2rem">
-      <div class="loader"></div>
-    </div>
-    <div class="row">
-      <span class="text-danger alert alert-danger"
-        >No se encontró la referencia</span
-      >
-    </div>
+  <div *ngIf="showLoader" class="text-center mt-5">
+    <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+    <p class="text-dark mt-3">No se encontró la referencia</p>
   </div>
-  <div class="row mt-4 loader_container" *ngIf="loader">
-    <div class="row" style="margin-bottom: 2rem">
-      <div class="loader"></div>
-    </div>
-    <div class="row">
-      <span class="text-primary alert alert-primary col-lg-6 col-sm-11">
-        Cargando referencias...
-      </span>
-    </div>
-  </div>
-  <div class="row" *ngIf="!showLoader">
-    <div class="card-container">
-      <div class="card" *ngFor="let reference of filteredReferences">
-        <h2>{{ reference.nombreReferencia | titlecase }}</h2>
-        <hr />
-        <img
-          *ngIf="reference.imagen"
-          [src]="getImageUrl(reference.imagen)"
-          alt="No se encuentra la imagen"
-          class="reference-image mb-3"
-        />
 
-        <div class="tallas-container">
-          <div class="talla-item" *ngFor="let talla of tallas">
-            <span
-              ><b>Talla {{ talla }} </b>:</span
-            >
-            <span>{{ reference.tallas[talla.toString()] }}</span>
+  <div *ngIf="loader" class="text-center mt-5">
+    <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+    <p class="text-dark mt-3">Cargando referencias...</p>
+  </div>
+
+  <div class="row" *ngIf="!showLoader">
+    <div
+      class="card-container"
+      fxLayout="row wrap"
+      fxLayoutAlign="center start"
+      fxLayoutGap="20px"
+    >
+      <p-card
+        *ngFor="let reference of filteredReferences"
+        class="reference-card"
+        class="no-background-card"
+      >
+        <ng-template pTemplate="header">
+          <div class="my" style="text-align: center">
+            <h5>{{ reference.nombreReferencia | titlecase }}</h5>
           </div>
-        </div>
-        <hr />
-        <div class="row">
-          <span><b>Cantidad Total:</b> {{ reference.totalCantidad }}</span>
-        </div>
-        <div class="d-flex w-100 justify-content-center mt-3">
-          <button
-            mat-flat-button
-            color="primary me-2"
-            (click)="addNumbering(reference)"
-          >
-            Agregar
-          </button>
-          <button mat-flat-button color="primary" (click)="venta(reference)">
-            Venta
-          </button>
-        </div>
-      </div>
+        </ng-template>
+
+        <ng-template
+          pTemplate="content"
+          style="background-color: transparent; padding-top: 0"
+        >
+          <div class="image-container">
+            <img
+              *ngIf="reference.imagen"
+              [src]="getImageUrl(reference.imagen)"
+              alt="Imagen no encontrada"
+              class="reference-image"
+            />
+            <div *ngIf="!reference.imagen" class="placeholder-image"></div>
+          </div>
+
+          <div class="tallas-container" fxLayout="row wrap" fxLayoutGap="10px">
+            <div
+              *ngFor="let talla of tallas"
+              class="talla-item"
+              fxLayout="column"
+              fxLayoutAlign="center center"
+            >
+              <span
+                ><b>{{ talla }}</b
+                >: {{ reference.tallas[talla.toString()] || 0 }}</span
+              >
+            </div>
+          </div>
+
+          <div class="total mt-3" fxLayoutAlign="center center">
+            <b>Total cantidad:</b> {{ reference.totalCantidad }}
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+          <div class="mt-3" fxLayout="row" fxLayoutAlign="space-between center">
+            <button
+              class="p-button p-button-text me-2"
+              (click)="addNumbering(reference)"
+              style="border-radius: 10px"
+            >
+              <span class="p-button-label">Agregar</span>
+            </button>
+
+            <button
+              class="p-button p-button-text me-2"
+              (click)="venta(reference)"
+              style="border-radius: 10px"
+            >
+              <span class="p-button-label">Venta</span>
+            </button>
+          </div>
+        </ng-template>
+      </p-card>
     </div>
   </div>
 </div>

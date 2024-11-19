@@ -6,16 +6,20 @@
 .backbutton button {
   height: 40px;
 }
-.row h4 {
-  color: white;
+
+.container {
+}
+
+.center {
+  margin: 0 auto;
 }
 
 h2 {
   font-family: "Afacad Flux", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  color: white;
   font-weight: 500;
+  margin: 0 auto !important;
 }
 
 .table-responsive {

@@ -1,0 +1,65 @@
+<div class="container pt-2 mt-4">
+  <div class="d-flex justify-content-between align-items-center buttons mb-4">
+    <h3 class="mb-4">Clientes</h3>
+    <div class="button">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        label="Agregar Cliente"
+        class="p-button-primary me-2 mb-2"
+        style="border-radius: 5px"
+        (click)="openModal()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-dollar"
+        label="Cuentas por Cobrar"
+        class="p-button-primary mb-2"
+        style="border-radius: 5px"
+        (click)="openCuentasPorPagarModal()"
+      ></button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center mt-5">
+    <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+    <p class="mt-3">Cargando Clientes...</p>
+  </div>
+
+  <div
+    *ngIf="
+      (filteredClientes.length === 0 && searchTerm.trim() !== '' && !loading) ||
+      (clientes.length === 0 && !loading)
+    "
+    class="text-center mt-5"
+  >
+    <p-progressSpinner styleClass="center"></p-progressSpinner>
+    <p class="mt-3">No se encontraron Clientes</p>
+  </div>
+
+  <table *ngIf="!loading" class="table table-hover">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th class="text-center">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cliente of filteredClientes">
+        <td>{{ cliente.nombre | titlecase }}</td>
+        <td class="text-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-eye"
+            label="Ver cuenta"
+            class="p-button-text"
+            (click)="openCuentaModal(cliente)"
+          ></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

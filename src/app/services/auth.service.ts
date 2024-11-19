@@ -6,11 +6,11 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private isLoggedIn = false;
+  private currentUser: string | null = null;
 
   private loggindata = [
-    { user: 'diego', password: '1037601503' },
-    { user: 'yenni', password: '1037641514' },
-    { user: '', password: '' },
+    { user: 'diego', password: '1037601503', name: 'Diego' },
+    { user: 'yenni', password: '1037641514', name: 'Yennifer' },
   ];
 
   constructor(private router: Router) {}
@@ -22,6 +22,7 @@ export class AuthService {
 
     if (validUser) {
       this.isLoggedIn = true;
+      this.currentUser = validUser.name;
       return true;
     }
     return false;
@@ -29,10 +30,16 @@ export class AuthService {
 
   logout() {
     this.isLoggedIn = false;
+    this.currentUser = null;
+
     this.router.navigate(['/Home']);
   }
 
   isAuthenticated(): boolean {
     return this.isLoggedIn;
+  }
+
+  getCurrentUserName(): string | null {
+    return this.currentUser;
   }
 }

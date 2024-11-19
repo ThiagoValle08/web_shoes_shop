@@ -9,8 +9,9 @@ export interface Referencia {
 
 export interface Venta {
   fecha: Date;
+  id?: string;
   formaPago: string;
-  saleId: string;
+  saleId?: string;
   nombreCliente: string;
   precio: number;
   referencia: string;

@@ -1,0 +1,21 @@
+<div class="welcome-card">
+  <div class="user-icon">
+    <i class="pi pi-user" style="font-size: 3rem"></i>
+  </div>
+  <h2>¡{{ text }} {{ userName }}!</h2>
+  <p>Nos alegra verte de nuevo.</p>
+  <p>✨ ¡Que tengas un día excelente! ✨</p>
+
+  <div class="info-row">
+    <div class="info-box">
+      <i class="pi pi-calendar icons"></i>
+      <span class="label">Fecha</span>
+      <span class="value">{{ currentDate | date }}</span>
+    </div>
+    <div class="info-box">
+      <i class="pi pi-clock icons"></i>
+      <span class="label">Hora</span>
+      <span class="value">{{ currentTime | date : "hh:mm:ss a" }}</span>
+    </div>
+  </div>
+</div>

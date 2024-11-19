@@ -24,6 +24,9 @@
   .btn_contenedor {
     flex-direction: column;
   }
+  .container h2 {
+    text-align: center;
+  }
 }
 .demo-table {
   width: 100%;
